@@ -29,21 +29,21 @@ for i in range(len(Img_number_dir)):
 
     a = plt.imread(dir + Img_number_dir[i])
 
-    label_matrix=np.zeros(shape=(np.shape(a)[0],np.shape(a)[1],1),dtype=np.uint8)
+    label_matrix=np.zeros(shape=(np.shape(a)[0],np.shape(a)[1]),dtype=np.uint8)
     for m in range(np.shape(a)[0]):
         for n in range(np.shape(a)[1]):
             pixel=a[m,n,:3]*255
             backgroud=1
             for k in range(len(Pixel)):
                 if abs(Pixel[k][0]-pixel[0])<2 and abs(Pixel[k][1]-pixel[1])<2 and abs(Pixel[k][2]-pixel[2])<2:
-                    label_matrix[m,n,0]=k
+                    label_matrix[m,n]=k
                     backgroud=0
                     break
             if backgroud==1:
-                label_matrix[m, n, 0] = 19
+                label_matrix[m,n] = 19
     img = Image.fromarray(label_matrix)
-    # plt.imshow(img)
-    # plt.show()
+    plt.imshow(img)
+    plt.show()
     # img.show()
     img.save(save_dir+Img_number_dir[i])
     # np.save(dir+Img_number_dir[i][:(len(Img_number_dir[i])-4)], label_matrix)

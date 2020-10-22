@@ -89,26 +89,40 @@ labels = [
 ]
 
 id2label = { label.id      : label for label in labels}
-dir = './Dataset/semantic_image/training/semantic/'
-save_dir = './Dataset/semantic_image/training/label_img/'
+dir = '/Users/lihaixiong/Documents/Python/semantic_tmp/FCN_Kitti-master/Dataset/semantic_image/training/semantic/'
+save_dir = '/Users/lihaixiong/Documents/Python/semantic_tmp/FCN_Kitti-master/Dataset/semantic_image/training/id/'
+
 Img_number_dir=os.listdir(dir)
+
 for i in range(len(Img_number_dir)):
+
     print (i)
-    print(Img_number_dir[i])
-    a = cv2.imread(dir+Img_number_dir[i],0)
+    # print(Img_number_dir[i])
+    a = cv2.imread(dir + Img_number_dir[i],0)
+    # b = plt.imread('./Dataset/original_image/train/' + Img_number_dir[i])
+
+    a = cv2.resize(a, (1242, 375))
     # cv2.imshow("show",a)
     # cv2.waitKey()
     label_img=np.zeros(shape=(np.shape(a)[0],np.shape(a)[1]),dtype=np.uint8)
+    # print(a.max())
     for m in range(np.shape(a)[0]):
         for n in range(np.shape(a)[1]):
             class_num = int(a[m, n])
-            if class_num == -1:
-                color = -1
+            color = id2label[class_num].trainId
+
+            if color>=0 and color < 19:
+                label_img[m, n] = color
             else:
-                color = id2label[class_num].trainId
-            label_img[m,n] = color
+                label_img[m,n] = 19
+
+
+    print(Img_number_dir[i],label_img.max())
 
     img = Image.fromarray(label_img)
+    maxid = label_img.max()
+    if(maxid>=20):
+        print('error')
     # plt.imshow(img)
     # plt.show()
     # img.show()
